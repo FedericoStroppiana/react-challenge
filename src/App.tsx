@@ -26,8 +26,37 @@ function App() {
     setResult(result);
   }, [rows]);
 
+  // Update row state when sign changes
+  const handleSignChange = (e: any, index: number) => {
+    let tempRowsCopy = [...rows];
+    tempRowsCopy[index].sign = e.target.value;
+    setRows(tempRowsCopy);
+  };
+
+  // Update row state when value changes
+  const handleValueChange = (e: any, index: number) => {
+    let tempRowsCopy = [...rows];
+    tempRowsCopy[index].value = e.target.value;
+    setRows(tempRowsCopy);
+  };
+
+  // Disable row when clicked
+  const handleDisableClick = (index: number) => {
+    let tempRowsCopy = [...rows];
+    tempRowsCopy[index].disabled = !tempRowsCopy[index].disabled;
+    setRows(tempRowsCopy);
+  };
+
+  // Remove row when clicked
+  const handleDeleteClick = (index: number) => {
+    let tempRowsCopy = [...rows];
+    tempRowsCopy.splice(index, 1);
+    setRows(tempRowsCopy);
+  };
+
   return (
     <div className="App">
+      <h1>React Challenge - Federico Luciano Stroppiana</h1>
       <button
         onClick={() => {
           // Add new row
@@ -38,15 +67,13 @@ function App() {
       </button>
       <ul>
         {/* Print rows */}
-        {rows.map((number, index) => (
+        {rows.map((row, index) => (
           <li key={index}>
             <select
-              value={number.sign}
+              value={row.sign}
               // Update row state when sign changes
-              onChange={(e: any) => {
-                let tempRowsCopy = [...rows];
-                tempRowsCopy[index].sign = e.target.value;
-                setRows(tempRowsCopy);
+              onChange={(e) => {
+                handleSignChange(e, index);
               }}
             >
               <option value="+">+</option>
@@ -54,30 +81,24 @@ function App() {
             </select>
             <input
               type="number"
-              value={number.value}
+              value={row.value}
               // Update row state when value changes
-              onChange={(e: any) => {
-                let tempRowsCopy = [...rows];
-                tempRowsCopy[index].value = e.target.value;
-                setRows(tempRowsCopy);
+              onChange={(e) => {
+                handleValueChange(e, index);
               }}
             />
             <button
               // Disable row when clicked
               onClick={() => {
-                let tempRowsCopy = [...rows];
-                tempRowsCopy[index].disabled = !tempRowsCopy[index].disabled;
-                setRows(tempRowsCopy);
+                handleDisableClick(index);
               }}
             >
-              {number.disabled ? "Enable" : "Disable"}
+              {row.disabled ? "Enable" : "Disable"}
             </button>
             <button
               // Remove row when clicked
               onClick={() => {
-                let tempRowsCopy = [...rows];
-                tempRowsCopy.splice(index, 1);
-                setRows(tempRowsCopy);
+                handleDeleteClick(index);
               }}
             >
               Delete
